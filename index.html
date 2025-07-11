@@ -1,44 +1,80 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
   <title>出場者数カウンター</title>
   <style>
+    /* 背景グラデーション */
     body {
-      font-family: sans-serif;
-      text-align: center;
-      margin-top: 100px;
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #fff;
     }
+
+    /* カード風中央ボックス */
+    .counter-box {
+      background: rgba(255, 255, 255, 0.15);
+      padding: 40px 60px;
+      border-radius: 15px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+      text-align: center;
+      max-width: 320px;
+      width: 90vw;
+      user-select: none;
+    }
+
+    /* 大きい数字スタイル */
     #line1, #line2 {
-      font-size: 1.8em;
-      margin: 10px;
-      color: #2c3e50;
+      font-size: 2.2em;
+      margin: 0.4em 0;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-shadow: 0 2px 5px rgba(0,0,0,0.4);
+    }
+
+    /* 読み込み中・エラー時の色 */
+    #line1.loading {
+      color: #ccc;
+      font-style: italic;
+      font-weight: 400;
+      text-shadow: none;
     }
   </style>
 </head>
 <body>
-  <div id="line1">読み込み中...</div>
-  <div id="line2"></div>
+  <div class="counter-box">
+    <div id="line1" class="loading">読み込み中...</div>
+    <div id="line2"></div>
+  </div>
 
   <script>
     async function fetchCount() {
       try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycbwIOKsrkXYAQ9kY7D4oQ_0w6huuMIY1wbb8Pdyt8_lx5ycSRp09ZUFxGfu4mocHr3Iq_A/exec
-");
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwIOKsrkXYAQ9kY7D4oQ_0w6huuMIY1wbb8Pdyt8_lx5ycSRp09ZUFxGfu4mocHr3Iq_A/exec");
         const text = await res.text();
-        
-        // 改行文字で分割して2行に分けて表示
         const lines = text.split("\n");
-        document.getElementById("line1").textContent = lines[0] || "";
-        document.getElementById("line2").textContent = lines[1] || "";
+        const line1 = document.getElementById("line1");
+        const line2 = document.getElementById("line2");
+
+        line1.textContent = lines[0] || "";
+        line2.textContent = lines[1] || "";
+        line1.classList.remove("loading");
       } catch (e) {
-        document.getElementById("line1").textContent = "読み込み失敗";
-        document.getElementById("line2").textContent = "";
+        const line1 = document.getElementById("line1");
+        const line2 = document.getElementById("line2");
+        line1.textContent = "読み込み失敗";
+        line2.textContent = "";
+        line1.classList.add("loading");
       }
     }
 
-    fetchCount(); // 最初に1回実行
-    setInterval(fetchCount, 30000); // 30秒ごとに自動更新
+    fetchCount();
+    setInterval(fetchCount, 30000);
   </script>
 </body>
 </html>
