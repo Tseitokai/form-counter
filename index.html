@@ -4,26 +4,40 @@
   <meta charset="UTF-8">
   <title>出場者数カウンター</title>
   <style>
-    body { font-family: sans-serif; text-align: center; margin-top: 100px; }
-    #count { font-size: 2em; color: #2c3e50; }
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      margin-top: 100px;
+    }
+    #line1, #line2 {
+      font-size: 1.8em;
+      margin: 10px;
+      color: #2c3e50;
+    }
   </style>
 </head>
 <body>
-  <div id="count">読み込み中...</div>
+  <div id="line1">読み込み中...</div>
+  <div id="line2"></div>
 
   <script>
     async function fetchCount() {
       try {
-        const res = await fetch("https://script.google.com/a/macros/mie-takada-hj.ed.jp/s/AKfycbzHcoCkeupvRaAtdhNeH_u_TrlcS2d7smFVdSHqqw6zDmPHDP73g3KRgoHu3yB62RjBpw/exec"); // ここにスクリプトURL
+        const res = await fetch(https://script.google.com/macros/s/AKfycbzHcoCkeupvRaAtdhNeH_u_TrlcS2d7smFVdSHqqw6zDmPHDP73g3KRgoHu3yB62RjBpw/exec);
         const text = await res.text();
-        document.getElementById("count").textContent = text;
+        
+        // 改行文字で分割して2行に分けて表示
+        const lines = text.split("\n");
+        document.getElementById("line1").textContent = lines[0] || "";
+        document.getElementById("line2").textContent = lines[1] || "";
       } catch (e) {
-        document.getElementById("count").textContent = "読み込み失敗";
+        document.getElementById("line1").textContent = "読み込み失敗";
+        document.getElementById("line2").textContent = "";
       }
     }
 
-    fetchCount();
-    setInterval(fetchCount, 30000); // 30秒ごとに更新
+    fetchCount(); // 最初に1回実行
+    setInterval(fetchCount, 30000); // 30秒ごとに自動更新
   </script>
 </body>
 </html>
